@@ -28,8 +28,6 @@ async def main():
     dp.include_router(router)
     await bot.set_my_commands([
         BotCommand(command = "/start", description="Botni ishga tushirish"),
-        BotCommand(command =  "/help", description="Yordam"),
-        BotCommand(command = "/menu", description="Xarid qilish")
     ])
     await init()
     await bot.delete_webhook(drop_pending_updates=True)

@@ -1,5 +1,5 @@
 from aiogram import types, Router, F
-from aiogram.types import Message, CallbackQuery, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import Message, CallbackQuery, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardRemove
 from states import sign
 from aiogram.filters import Command, CommandStart
 from aiogram.fsm.context import FSMContext
@@ -48,9 +48,10 @@ async def get_location(message: Message, state: FSMContext):
 async def get_contact(message: Message, state: FSMContext):
     phone_number = message.contact.phone_number
     await state.update_data(contact=phone_number)
+    await message.answer("Rahmat, kontakt qabul qilindi", reply_markup=ReplyKeyboardRemove())
     data = await state.get_data()
 
-    # foydalanuvchi ID bo‘yicha user_info dict'ga yozamiz
+
     user_id = message.from_user.id
     user_info[user_id] = {
         "name": data.get("name"),
@@ -188,14 +189,13 @@ async def send_order_to_admin(callback: CallbackQuery, state: FSMContext):
         "10l": 10000,
         "19l": 15000
     }
-
-    # Hhar bitta litr uchun narxni hisoblab ketaman
+    # har bitta litr uchun narxni hisoblab ketaman
     total_price = (
         order.get('5l', 0) * prices['5l'] +
         order.get('10l', 0) * prices['10l'] +
         order.get('19l', 0) * prices['19l']
     )
-
+    await callback.message.answer(f"💵 Buyurtma summasi: {total_price:,} so'm")
     text = (
         f"🆕 Yangi buyurtma!\n"
         f"👤 Foydalanuvchi: @{callback.from_user.username}\n"
