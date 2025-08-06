@@ -4,5 +4,6 @@ class sign(StatesGroup):
     name = State()
     lastname = State()
     age = State()
-    contact = State()
     location = State()
+    contact = State()
+    
